@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using WishList.Data;
 using WishList.Models;
 
@@ -20,9 +21,19 @@ namespace WishList.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Item)
+        public IActionResult Create(Models.Item item)
         {
-            return;
+            _context.Items.Add(item);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var item = _context.Items.FirstOrDefault(e => e.Id == id);
+            _context.Items.Remove(item);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
     }
